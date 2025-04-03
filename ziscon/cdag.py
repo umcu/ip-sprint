@@ -1,6 +1,8 @@
 """CDAG: colored directed acyclic graph"""
 
 from csv import DictReader
+from collections import defaultdict
+from itertools import chain
 
 """Actual classes and functions for the DAG"""
 class Graph:
@@ -24,7 +26,7 @@ class Graph:
     def adjacent(self, node, kind):
         edges = [edge for edge in node.edges if edge.kind == kind]
         return [edge.end for edge in edges]
-    def search_nodes(self, kind, **kwarg):
+    def find_nodes(self, kind, **kwarg):
         """
         search nodes of kind `kind` with key == value or key.lower()== value,
         where (key, value) form the first element of `kwarg`
@@ -34,10 +36,45 @@ class Graph:
         selection = [node for node in self.nodes.values() if node.kind == kind]
         result = [node for node in selection
                   if getattr(node, key) == value or getattr(node, key.lower()) == value]
-        #for r in result:
-        #    print(r)
+        for r in result:
+            print(r)
+        return result
+    def find_one_node(self, kind, **kwarg):
+        result = self.find_nodes(kind, **kwarg)
+        if len(result) == 0:
+            print(f"No {kind} found with {kwarg}")
+            return
+        elif len(result) == 1:
+            return result[0]
+        else:
+            print(f"Multiple {kind}s found with {kwarg}")
+            return
+    def ancestors_of_group(self, group, visited=None, distance=1):
+        if visited is None:
+            visited = defaultdict(int)
+        result = []
+        for parent in self.adjacent(group, 'ischild'):
+            if visited[parent.nodeid]: continue
+            visited[parent.nodeid] = 1
+            parent._distance = distance
+            result.append(parent)
+            result.extend(self.ancestors_of_group(parent, visited, distance+1))
         return result
 
+    def groups_for_user(self, user):
+        return self.adjacent(user, 'ismember')
+
+    def roles_for_user(self, user):
+        return self.adjacent(user, 'hasrole')
+
+    def effective_groups_for_user(self, user):
+        parents = self.groups_for_user(user)
+        all_groups = list(chain.from_iterable(self.ancestors_of_group(g) for g in parents))
+        for p in parents:
+            p._distance = 0
+            all_groups.append(p)
+        all_groups.sort(key=lambda g: g._distance)
+        return all_groups
 class Node:
     def __init__(self, **kwarg):
         self.kind = 'Node'
@@ -54,6 +91,13 @@ class User(Node):
     def __init__(self, **kwarg):
         super().__init__(**kwarg)
         self.kind = 'User'
+    def __str__(self):
+        return f"{self.naam} {self.omschr}"
+
+class Role(Node):
+    def __init__(self, **kwarg):
+        super().__init__(**kwarg)
+        self.kind = 'Role'
     def __str__(self):
         return f"{self.naam} {self.omschr}"
 
@@ -84,25 +128,15 @@ def read_table(filename, cast=True):
         reader = DictReader(csvfile, delimiter=',')
         result = []
         if cast:
-            for row in reader:
-                # strip() is necessary because some cells have trailing whitespace
+            for k, row in enumerate(reader):
+                # strip() is necessary because some cells have leading or trailing whitespace
                 result.append({key.lower(): value.strip() for key, value in row.items()})
         else:
-            for row in reader:
-                result.append(row)
+            for k, row in enumerate(reader):
+                result.append({key: value.strip() for key, value in row.items()})
     return result
 
-def find_single_node(kind, key, value):
-    kwarg = {key: value}
-    result = graph.search_nodes(kind, **kwarg)
-    if len(result) == 0:
-        raise ValueError(f"No {kind} found with {key}={value}")
-    elif len(result) == 1:
-        return result[0]
-    else:
-        raise ValueError(f"Multiple {kind}s found with {key}={value}")
-
-def load_data():
+def load_data(graph):
     """
     Future version: load the following tables from the database
     - tables ziscon_groepen, ziscon_groepusr, ziscon_groeplnk, ziscon_user
@@ -111,35 +145,42 @@ def load_data():
 
     For now: use CSV exports (raw for ziscon, pre-joined for config)
     """
-    global users, groups, graph, user_index, group_index
-    graph = Graph()
-    users = read_table('ziscon_user.csv')
-    user_index = {}
-    for elt in users:
-        new_user = User(**elt)
-        user_index[elt['naam']] = new_user
-        graph.add_node(new_user)
-    groups = read_table('ziscon_groepen.csv')
+    user_index, role_index = {}, {}
+    for elt in read_table('ziscon_user.csv'):
+        if elt['inloggroep'] == '1':
+            new_node = Role(**elt)
+            role_index[elt['naam']] = new_node
+        else:
+            new_node = User(**elt)
+            user_index[elt['naam']] = new_node
+        graph.add_node(new_node)
+
     group_index = {}
-    for elt in groups:
+    for elt in read_table('ziscon_groepen.csv'):
         new_group = Group(**elt)
-        if elt['code'] == 'ZH1288':
-            print(new_group)
         group_index[elt['code']] = new_group
         graph.add_node(new_group)
-    group_links = read_table('ziscon_groeplnk.csv')
-    for elt in group_links:
+
+    for elt in read_table('ziscon_groeplnk.csv'):
         linkcode, groupcode = elt['linkcode'], elt['groepcode']
-        if linkcode.isalpha():
+        if linkcode.isalnum():
+            # most users are alphanumeric, some are numeric \d{8} however
             if linkcode in user_index:
                 user = user_index[linkcode]
                 if groupcode in group_index:
                     group = group_index[groupcode]
                     graph.connect(user, 'ismember', group)
                 else:
-                    print(f"user-group: group {groupcode} not in group index")
+                    print(f"user-group: group {groupcode} not in group index, user linkcode={linkcode}")
+            elif linkcode in role_index:
+                role = role_index[linkcode]
+                if groupcode in group_index:
+                    group = group_index[groupcode]
+                    graph.connect(role, 'ismember', group)
+                else:
+                    print(f"user-group: group {groupcode} not in group index, role={linkcode}")
             else:
-                print(f"user-group: user {linkcode} not in user index")
+                print(f"user-group: user {linkcode} not in user or role index, group={groupcode}")
         elif linkcode[0] == '@':
             parentcode = groupcode
             childcode = linkcode[2:]
@@ -149,8 +190,21 @@ def load_data():
                     child = group_index[childcode]
                     graph.connect(child, 'ischild', parent)
                 else:
-                    print(f"group-group: child {childcode} not in group index")
+                    print(f"group-group: child {childcode} not in group index, parent={parentcode}")
             else:
-                print(f"group-group: parent {parentcode} not in group index")
+                print(f"group-group: parent {parentcode} not in group index, child={childcode}")
+
+    for elt in read_table('ziscon_groepusr.csv'):
+        grpusrcode, usercode = elt['grpusrcode'], elt['usercode']
+        if usercode in user_index:
+            user = user_index[usercode]
+            if grpusrcode == 'CHIPSOFT': continue
+            if grpusrcode in role_index:
+                role = role_index[grpusrcode]
+                graph.connect(user, 'hasrole', role)
+            else:
+                print(f"user-role: role {grpusrcode} not in role index, user={user}")
+        else:  # mostly Chipsoft-related users
+            pass
 
     # worksetting = read_table('config_workcontext.csv')
