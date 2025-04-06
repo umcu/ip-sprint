@@ -108,10 +108,12 @@ class Group(Node):
     def __str__(self):
         return f"{self.code} {self.searchcode} {self.omschr}"
 
-class WorkContext(Node):
+class Right(Node):
     def __init__(self, **kwarg):
         super().__init__(**kwarg)
-        self.kind = 'WorkContext'
+        self.kind = 'Right'
+    def __str__(self):
+        return f"{self.settingid} {self.segmentclassid} {self.segmentid}"
 
 class Edge:
     def __init__(self, begin: Node, kind: str, end: Node):
@@ -145,6 +147,7 @@ def load_data(graph):
 
     For now: use CSV exports (raw for ziscon, pre-joined for config)
     """
+    error_log = open('error.log', 'w')
     user_index, role_index = {}, {}
     for elt in read_table('ziscon_user.csv'):
         if elt['inloggroep'] == '1':
@@ -207,4 +210,12 @@ def load_data(graph):
         else:  # mostly Chipsoft-related users
             pass
 
-    # worksetting = read_table('config_workcontext.csv')
+    for k, elt in enumerate(read_table('workcontext.csv')):
+        new_right = Right(**elt)
+        graph.add_node(new_right)
+        ownerid = elt['ownerid']
+        if ownerid in group_index:
+            group = group_index[ownerid]
+            graph.connect(group, 'hasright', new_right)
+        else:
+            print(f"group-workcontext: group {ownerid} not in group index, record={k}", file=error_log)

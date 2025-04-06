@@ -30,9 +30,3 @@ FROM           [HIX_Acc].[dbo].[ZISCON_GROEPEN] G
     INNER JOIN [HIX_Acc].[dbo].[CONFIG_WCSEGMENTS] WCS ON WC.[ID] = WCS.[CONFIGUREDWORKCONTEXTID]
     INNER JOIN [HIX_Acc].[dbo].[AGENDA_AGENDA] A ON WCS.[SEGMENTID] = A.[AGENDA]
     WHERE wc.[SettingId] = 'AG_US_BEK'
-
-
--- exporteren voor data-inspectie met Python
--- SELECT * FROM [HIX_Acc].[dbo].[ZISCON_GROEPEN]
--- SELECT * FROM [HIX_Acc].[dbo].[ZISCON_GROEPUSR]
--- SELECT * FROM [HIX_Acc].[dbo].[ZISCON_GROEPLNK]
