@@ -1,0 +1,662 @@
+Wijzigingen in agenda_afspcode
+==============================
+Wijzigingen op 2024-09-02 15:01:04
++A 09350581|ZH0435||Maximale inspanningstest LVAD-patiënten
+
+
+Wijzigingen op 2024-09-02 15:02:34
++A 09350582|ZH0091||Indirecte tijd, Revalidatiebehandeling
++A 09350582|ZH0437||Indirecte tijd, Revalidatiebehandeling
+
+
+Wijzigingen op 2024-09-02 15:05:03
++A 09350582|ZH0436||Indirecte tijd, Revalidatiebehandeling
++A 09350582|ZH0438||Indirecte tijd, Revalidatiebehandeling
++A 09350582|ZH0439||Indirecte tijd, Revalidatiebehandeling
++A 09350582|ZH0444||Indirecte tijd, Revalidatiebehandeling
+
+
+Wijzigingen op 2024-09-02 16:45:35
+ A 09350582|ZH0091||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      5
+   Indirect     0      5
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   S
+ 
+
+
+Wijzigingen op 2024-09-02 16:51:33
+ A 09350582|ZH0437||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      5
+   Indirect     0      5
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   S
+ 
+
+
+Wijzigingen op 2024-09-02 16:58:03
+ A 09350582|ZH0436||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      5
+   Indirect     0      5
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   F
+ 
+
+
+Wijzigingen op 2024-09-02 17:56:33
+ A 09350582|ZH0438||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      5
+   Indirect     0      5
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   S
+ 
+
+
+Wijzigingen op 2024-09-02 18:02:04
+ A 09350582|ZH0439||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      5
+   Indirect     0      5
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   S
+ 
+
+
+Wijzigingen op 2024-09-02 18:09:02
+ A 09350581|ZH0435||Maximale inspanningstest LVAD-patiënten
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      60
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   F
+ 
+
+
+Wijzigingen op 2024-09-03 09:22:03
+ A ZH000896|ZH0017||Controle fysiek EFO
+   field    old    new
+   -------  -----  ----------
+   PATINFO  NULL   ZH00000371
+ 
+
+
+Wijzigingen op 2024-09-03 12:24:33
++A ZH001560|020434||echo bloedafname
+
+
+Wijzigingen op 2024-09-04 13:19:32
++A ZH000024|ZH0214||Controle Fysiek Spoed
+
+
+Wijzigingen op 2024-09-04 13:23:02
++A ZH000024|ZH0229||Controle Fysiek Spoed
+
+
+Wijzigingen op 2024-09-05 07:13:02
+ A 989846U|020433||RT MRI HALS ORCA STUDIE
+   field        old    new
+   ---------  -----  -----
+   Vervallen      0      1
+ 
+ A 989846U|ZH0477||RT MRI HALS ORCA STUDIE
+   field        old    new
+   ---------  -----  -----
+   Vervallen      0      1
+ 
+
+
+Wijzigingen op 2024-09-05 10:04:08
+ A ZH002833|ZH0129||Telefonisch consult herhaal Solk
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      H
+ 
+
+
+Wijzigingen op 2024-09-05 10:08:32
+ A ZH000020|ZH0131||Controle Fysiek 
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH000026|ZH0131||Nieuw Fysiek
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  E      *
+ 
+ A ZH000047|ZH0131||Controle Screen to Screen
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH004598|ZH0129||Telefonisch consult na IC-opname
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      E
+ 
+
+
+Wijzigingen op 2024-09-05 10:15:07
+ A ZH000038|ZH0131||Nieuw Telefonisch
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  E      *
+ 
+ A ZH000046|ZH0131||Nieuw Screen to Screen
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  E      *
+ 
+
+
+Wijzigingen op 2024-09-05 10:26:02
+ A ZH001040|ZH0138||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+
+
+Wijzigingen op 2024-09-05 10:33:32
+ A ZH000038|ZH0149||Nieuw consult telefonisch
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      E
+ 
+ A ZH000056|ZH0138||Nieuw Telefonisch Second Opinion
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      E
+ 
+ A ZH000056|ZH0149||Nieuw Telefonisch Second Opinion
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      E
+ 
+ A ZH001041|ZH0139||Controle telefonisch verpleegkundig specialist
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      H
+ 
++A ZH006181|ZH0157||Nieuw fysiek expertiseadvies met patiënt
+
+
+Wijzigingen op 2024-09-05 10:41:33
+ A 09350500|ZH0157||Nieuw telefonisch expertiseadvies met patiënt
+   field        old    new
+   ---------  -----  -----
+   Vervallen      0      1
+ 
++A 09350585|ZH0157||Nieuw telefonisch expertiseadvies zonder patiënt
+ A ZH000056|ZH0154||Nieuw Telefonisch Second Opinion
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      E
+ 
+ A ZH001040|ZH0154||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
++A ZH006187|ZH0157||Nieuw telefonisch expertiseadvies met patiënt
+
+
+Wijzigingen op 2024-09-05 10:47:03
+ A 09350521|ZH0157||Nieuw telefonisch expertiseadvies zonder patiënt
+   field        old    new
+   ---------  -----  -----
+   Vervallen      0      1
+ 
+ A ZH001040|ZH0155||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH001040|ZH0158||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH003376|ZH0155||Telefonische second opinion
+   field    old                          new
+   -------  ---------------------------  ---------------------------------
+   OMSCHR   Telefonische second opinion  Nieuw telefonische second opinion
+ 
+ A ZH004071|ZH0158||Telefonisch second opinion
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      H
+ 
+
+
+Wijzigingen op 2024-09-05 10:54:36
+ A ZH000056|ZH0163||Nieuw Telefonisch Second Opinion
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      E
+ 
+ A ZH000056|ZH0164||Nieuw Telefonisch Second Opinion
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  T      E
+ 
+ A ZH001040|ZH0159||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH001040|ZH0163||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH001040|ZH0164||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+
+
+Wijzigingen op 2024-09-05 11:02:32
+ A ZH001040|ZH0165||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH001040|ZH0170||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+ A ZH001090|ZH0164||Controle TENS
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  *      H
+ 
+
+
+Wijzigingen op 2024-09-05 11:11:33
+ A ZH001040|ZH0171||Controle screen to screen verpleegkundige
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  H      *
+ 
+
+
+Wijzigingen op 2024-09-05 12:54:33
+ A ZH006181|ZH0157||Nieuw fysiek expertiseadvies met patiënt
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      45
+   CONSTYPE     NULL   *
+   CONTACTTYPE  NULL   F
+ 
+
+
+Wijzigingen op 2024-09-05 13:38:03
+ A ZH001488|ZH0098||ERCP cholangio met opname en sedatie procedureel
+   field    old    new
+   -------  -----  ----------
+   PATINFO  NULL   ZH00000426
+ 
+
+
+Wijzigingen op 2024-09-05 13:43:32
+ A ZH006140|ZH0098||PEG + jejunumpoot met opname, sedatie procedureel
+   field        old           new
+   -----------  -----  ----------
+   ZORGPADLINK  NULL   0000000434
+ 
+
+
+Wijzigingen op 2024-09-05 13:56:33
+ A 09350582|ZH0436||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   CONTACTTYPE  F      S
+ 
+
+
+Wijzigingen op 2024-09-05 14:08:32
+ A 09350582|ZH0436||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   CONTACTTYPE  S      F
+ 
+
+
+Wijzigingen op 2024-09-05 14:21:49
+ A 09350582|ZH0444||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   Indirect     0      5
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   S
+ 
+
+
+Wijzigingen op 2024-09-06 07:55:33
+ A 09350582|ZH0436||Indirecte tijd, Revalidatiebehandeling
+   field        old    new
+   -----------  -----  -----
+   CONTACTTYPE  F      S
+ 
+
+
+Wijzigingen op 2024-09-06 13:33:32
++A ZH005819|ZH0028||Nieuw fysiek UGI
+
+
+Wijzigingen op 2024-09-06 13:35:17
++A ZH005821|ZH0028||Nieuw screen to screen UGI
+
+
+Wijzigingen op 2024-09-09 12:56:33
+ A ZH001813|ZH0460||Thuisholter 48 uur Fysiologic WKZ
+   field        old    new
+   ---------  -----  -----
+   Vervallen      0      1
+ 
+
+
+Wijzigingen op 2024-09-09 12:58:27
+ A ZH001814|ZH0460||Thuisholter 72 uur Fysiologic WKZ
+   field        old    new
+   ---------  -----  -----
+   Vervallen      0      1
+ 
+
+
+Wijzigingen op 2024-09-09 14:31:33
++A 09350587|ZH0157||Nieuwe expertise consulten zonder patiënt
+
+
+Wijzigingen op 2024-09-09 14:34:32
++A 09350589|ZH0087||Controle fysiek OK 30 minuten
+
+
+Wijzigingen op 2024-09-09 14:47:34
++A ZH000139|ZH0225||Controle fysiek LATER
++A ZH000144|ZH0225||Nieuw consult LATER
++A ZH000146|ZH0225||Controle consult video LATER
++A ZH000147|ZH0225||Nieuw consult video LATER
++A ZH000152|ZH0225||Telefonisch consult LATER
++A ZH000800|ZH0225||Behandeling - Begeleidingscontact 18jr en ouder
+
+
+Wijzigingen op 2024-09-09 14:49:03
++A ZH000812|ZH0225||Psych.Onderz. - Intake contact 18 jr en ouder
++A ZH001273|ZH0225||Psych.Onderz. - Intake 18jr en ouder Nieuw
+
+
+Wijzigingen op 2024-09-10 06:57:33
+ A 09350585|ZH0157||Nieuw telefonisch expertiseadvies zonder patiënt
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      15
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   T
+ 
+ A ZH006187|ZH0157||Nieuw telefonisch expertiseadvies met patiënt
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      15
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   T
+ 
+
+
+Wijzigingen op 2024-09-10 11:32:33
+ A ZH003073|ZH0422||Nieuw Fertiliteit Fysiek Urologie
+   field      old    new
+   -------  -----  -----
+   DUUR        30     45
+ 
+
+
+Wijzigingen op 2024-09-10 13:11:41
+ A 09350337|ZH0017||Controle ICD meting technicus 
+   field     old                            new
+   --------  -----------------------------  -----------------------------
+   OMSCHR    Controle ICD meting technicus  Controle ICD meting technicus
+   CONSTYPE  H                              *
+ 
+
+
+Wijzigingen op 2024-09-11 08:50:03
+ A ZH000980|ZH0461||Inhalatie procovatietest (metacholinebromide)
+   field      old    new
+   -------  -----  -----
+   DUUR        90     60
+ 
+ A ZH001626|ZH0461||Lungclearance Index
+   field      old    new
+   -------  -----  -----
+   DUUR        30     60
+ 
+
+
+Wijzigingen op 2024-09-12 08:38:35
+ I ZH000024|ZH0221||Controle Fysiek Spoed
+   field        old    new
+   ---------  -----  -----
+   Vervallen      1      0
+ 
+
+
+Wijzigingen op 2024-09-12 08:41:33
++A ZH000024|ZH0217||Controle Fysiek Spoed
+
+
+Wijzigingen op 2024-09-12 09:17:03
+ A ZH000812|ZH0220||Psych.Onderz. - Intake contact 18 jr en ouder
+   field    old                                            new
+   -------  ---------------------------------------------  --------------------------------------------------
+   OMSCHR   Psych.Onderz. - Intake contact 18 jr en ouder  Psych.Onderz. - Intake contact 18 jr & ouder LATER
+ 
+
+
+Wijzigingen op 2024-09-12 09:21:34
+ A ZH000812|ZH0225||Psych.Onderz. - Intake contact 18 jr en ouder
+   field    old                                            new
+   -------  ---------------------------------------------  --------------------------------------------------
+   OMSCHR   Psych.Onderz. - Intake contact 18 jr en ouder  Psych.Onderz. - Intake contact 18 jr & ouder LATER
+ 
+ A ZH001273|ZH0220||Psych.Onderz. - Intake 18jr en ouder Nieuw
+   field    old                                         new
+   -------  ------------------------------------------  ------------------------------------------------
+   OMSCHR   Psych.Onderz. - Intake 18jr en ouder Nieuw  Psych.Onderz. - Intake 18jr en ouder Nieuw LATER
+ 
+ A ZH001273|ZH0225||Psych.Onderz. - Intake 18jr en ouder Nieuw
+   field    old                                         new
+   -------  ------------------------------------------  ------------------------------------------------
+   OMSCHR   Psych.Onderz. - Intake 18jr en ouder Nieuw  Psych.Onderz. - Intake 18jr en ouder Nieuw LATER
+ 
+
+
+Wijzigingen op 2024-09-12 09:28:03
+ A ZH000800|ZH0225||Behandeling - Begeleidingscontact 18jr en ouder
+   field    old                                              new
+   -------  -----------------------------------------------  -------------------------------------------------
+   OMSCHR   Behandeling - Begeleidingscontact 18jr en ouder  Behandeling - Begeleidingscont 18jr & ouder LATER
+ 
+
+
+Wijzigingen op 2024-09-12 11:37:03
+ A 09350589|ZH0087||Controle fysiek OK 30 minuten
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      30
+   CONSTYPE     NULL   H
+   CONTACTTYPE  NULL   F
+ 
+
+
+Wijzigingen op 2024-09-12 11:43:34
+ A ZH004208|ZH0087||Controle fysiek OK 45minuten
+   field    old                           new
+   -------  ----------------------------  -----------------------------
+   OMSCHR   Controle fysiek OK 45minuten  Controle fysiek OK 45 minuten
+ 
+ A ZH004327|ZH0087||Controle fysiek OK 15minuten
+   field    old                           new
+   -------  ----------------------------  -----------------------------
+   OMSCHR   Controle fysiek OK 15minuten  Controle fysiek OK 15 minuten
+ 
+
+
+Wijzigingen op 2024-09-12 11:50:32
+ A ZH000800|ZH0225||Behandeling - Begeleidingscont 18jr & ouder LATER
+   field    old                                                new
+   -------  -------------------------------------------------  -------------------------------------------
+   OMSCHR   Behandeling - Begeleidingscont 18jr & ouder LATER  Behandeling - Begeleidingscont 18jr & ouder
+ 
+ A ZH000812|ZH0225||Psych.Onderz. - Intake contact 18 jr & ouder LATER
+   field    old                                                 new
+   -------  --------------------------------------------------  --------------------------------------------
+   OMSCHR   Psych.Onderz. - Intake contact 18 jr & ouder LATER  Psych.Onderz. - Intake contact 18 jr & ouder
+ 
+ A ZH001273|ZH0225||Psych.Onderz. - Intake 18jr en ouder Nieuw LATER
+   field    old                                               new
+   -------  ------------------------------------------------  ------------------------------------------
+   OMSCHR   Psych.Onderz. - Intake 18jr en ouder Nieuw LATER  Psych.Onderz. - Intake 18jr en ouder Nieuw
+ 
+
+
+Wijzigingen op 2024-09-12 13:57:07
+ A ZH002375|ZH0087||Controle fysiek OK 
+   field      old    new
+   -------  -----  -----
+   DUUR        30     15
+ 
+
+
+Wijzigingen op 2024-09-13 12:35:33
+ A ZH004327|ZH0087||Controle fysiek OK 15 minuten
+   field        old    new
+   ---------  -----  -----
+   Vervallen      0      1
+ 
+
+
+Wijzigingen op 2024-09-16 07:23:33
+ A 989829C|ZH0226||CAPSUL ORAAL
+   field    old           new
+   -------  ------------  --------------------------
+   OMSCHR   CAPSUL ORAAL  KALIUMJODIDE CAPSULE ORAAL
+ 
+ A 989829C|ZH0304||CAPSUL ORAAL
+   field    old           new
+   -------  ------------  --------------------------
+   OMSCHR   CAPSUL ORAAL  KALIUMJODIDE CAPSULE ORAAL
+ 
+
+
+Wijzigingen op 2024-09-16 13:16:33
++A 09350590|ZH0153||Research fysiek Spectrum studie
+
+
+Wijzigingen op 2024-09-16 13:20:32
++A 09350592|ZH0163||Nieuw fysiek LR met PMC
+
+
+Wijzigingen op 2024-09-16 13:22:04
++A 09350593|ZH0163||Controle fysiek LR met PMC
+
+
+Wijzigingen op 2024-09-16 13:38:03
+ A 09350593|ZH0163||Controle fysiek LR met PMC
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      45
+   CONSTYPE     NULL   H
+   CONTACTTYPE  NULL   F
+ 
+
+
+Wijzigingen op 2024-09-16 13:44:33
+ A 09350592|ZH0163||Nieuw fysiek LR met PMC
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      45
+   CONSTYPE     NULL   E
+   CONTACTTYPE  NULL   F
+ 
+
+
+Wijzigingen op 2024-09-17 06:27:33
+ A 09350305|ZH0031||EBRT met 3D Longboard  - Start
+   field      old    new
+   -------  -----  -----
+   DUUR        15     30
+ 
+ A ZH000730|ZH0031||EBRT met breathhold - Start 
+   field    old                          new
+   -------  ---------------------------  ---------------------------
+   OMSCHR   EBRT met breathhold - Start  EBRT met breathhold - Start
+   DUUR     15                           30
+ 
+
+
+Wijzigingen op 2024-09-17 06:28:33
+ A 09350311|ZH0031||EBRT Orthovolt - Start 
+   field    old                     new
+   -------  ----------------------  ----------------------
+   OMSCHR   EBRT Orthovolt - Start  EBRT Orthovolt - Start
+   DUUR     15                      30
+ 
+
+
+Wijzigingen op 2024-09-17 06:38:03
++A ZH000020|ZH0220||Controle Fysiek 30
+
+
+Wijzigingen op 2024-09-17 12:52:04
+ A ZH003472|ZH0132||Indirecte zorg ergotherapie
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  NULL   V
+ 
+ A ZH003491|ZH0132||Polikinisch nieuw consult+ inspannings fysiologie
+   field     old    new
+   --------  -----  -----
+   CONSTYPE  NULL   V
+ 
+
+
+Wijzigingen op 2024-09-17 13:25:33
+ A 09350587|ZH0157||Nieuwe expertise consulten zonder patiënt
+   field        old    new
+   -----------  -----  -----
+   CONSTYPE     NULL   V
+   CONTACTTYPE  NULL   S
+ 
+
+
+Wijzigingen op 2024-09-17 13:31:32
+ A 09350587|ZH0157||Nieuwe expertise consulten zonder patiënt
+   field      old    new
+   -------  -----  -----
+   DUUR         0     15
+ 
+
+
+Wijzigingen op 2024-09-18 07:36:32
+ A 09350590|ZH0153||Research fysiek Spectrum studie
+   field        old    new
+   -----------  -----  -----
+   DUUR         0      60
+   CONSTYPE     NULL   *
+   CONTACTTYPE  NULL   F
+ 
+
+

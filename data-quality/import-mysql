@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+
+import json
+from mysql.connector import connect
+
+def drop_table(name):
+    query = f"DROP TABLE IF EXISTS {name}"
+    print(f"drop table {name}")
+    with conn.cursor() as cursor:
+        cursor.execute(query)
+
+def create_table(name, tdef):
+    s = ', '.join(f"{key} {value}" for key, value in tdef.items())
+    query = f"CREATE TABLE {name} ({s})"
+    print(f"create table {name}")
+    with conn.cursor() as cursor:
+        cursor.execute(query)
+        conn.commit()
+
+def insert_rows(name, keys, docs):
+    keys_l = list(keys)
+    s1 = ', '.join(keys_l)
+    s2 = ', '.join(len(keys_l) * ['%s'])
+    query = f"INSERT INTO {name} ({s1}) VALUES ({s2})"
+    rows = []
+    for doc in docs:
+        row = tuple(doc[key] for key in keys_l)
+        rows.append(row)
+    print(f"insert {len(rows)} rows in table {name}")
+    with conn.cursor() as cursor:
+        cursor.executemany(query, rows)
+        conn.commit()
+
+# create table if not exists
+def import_person(jsonfile):
+    model = {
+      'id':         'VARCHAR(24)',
+      'ctime':      'DATETIME',
+      'mtime':      'DATETIME',
+      'firstname':  'VARCHAR(200)',  
+      'patronym':   'VARCHAR(200)', 
+      'prefix':     'VARCHAR(200)',  
+      'lastname':   'VARCHAR(200)',  
+      'nickname':   'VARCHAR(200)',  
+      'birthdate':  'DATE',
+      'birthplace': 'VARCHAR(200)',  
+      'deathdate':  'DATE',
+      'deathplace': 'VARCHAR(200)',  
+      'deceased':   'BOOL',
+      'gender':     'VARCHAR(1)',
+      'family':     'VARCHAR(200)',
+      'marriages':  'VARCHAR(200)',
+      'religion':   'VARCHAR(200)', 
+      'notes':      'VARCHAR(200)', 
+      'sources':    'VARCHAR(200)',
+      'tags':       'VARCHAR(200)',
+      'pid':        'INT'
+    }
+    drop_table('person')
+    create_table('person', model)
+    with open(jsonfile, 'r') as f:
+        persons = [json.loads(line) for line in f]
+        insert_rows('person', model.keys(), persons)
+
+def import_family(jsonfile):
+    model = {
+      'id':            'VARCHAR(24)',
+      'ctime':         'DATETIME',
+      'mtime':         'DATETIME',
+      'marriagedate':  'DATE',
+      'marriageplace': 'VARCHAR(200)',
+      'husbandname':   'VARCHAR(200)',
+      'husband':       'VARCHAR(200)',
+      'wifename':      'VARCHAR(200)',
+      'wife':          'VARCHAR(200)',
+      'children':      'VARCHAR(200)',
+      'religion':      'VARCHAR(200)',
+      'notes':         'VARCHAR(200)',
+      'sources':       'VARCHAR(200)',
+      'tags':          'VARCHAR(200)',
+      'fid':           'INT'
+    }
+    drop_table('family')
+    create_table('family', model)
+    with open(jsonfile, 'r') as f:
+        families = [json.loads(line) for line in f]
+        insert_rows('family', model.keys(), families)
+
+def import_source(jsonfile):
+    model = {
+      'id':         'VARCHAR(24)',
+      'ctime':      'DATETIME',
+      'mtime':      'DATETIME',
+      'type':       'VARCHAR(200)',
+      'place':      'VARCHAR(200)',
+      'book':       'VARCHAR(200)',
+      'document':   'VARCHAR(200)',
+      'event':      'INT',
+      'eventdate':  'DATE',
+      'relations':  'VARCHAR(200)',
+      'text':       'VARCHAR(200)',
+      'persons':    'VARCHAR(200)',
+      'families':   'VARCHAR(200)',
+      'tags':       'VARCHAR(200)',
+      'guid':       'VARCHAR(40)',
+      'sid':        'INT'
+    }
+    drop_table('source')
+    create_table('source', model)
+    with open(jsonfile, 'r') as f:
+        sources = [json.loads(line) for line in f]
+        insert_rows('source', model.keys(), sources)
+
+if __name__=='__main__':
+    # import three MongoDb collections in MySQL
+    conn = connect(user='nico', password='', host='localhost', database='familytree')
+    # import_person('person.json')
+    import_family('family.json')
+    # import_source('source.json')
