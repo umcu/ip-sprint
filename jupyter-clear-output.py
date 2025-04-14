@@ -56,8 +56,8 @@ if test:
 # process notebook contents, overwrite notebook if successful
 contents = processor(contents)
 if contents is not None:
-    write_file = open(filename, 'w')
-    json.dump(contents, write_file, indent=1)
+    with open(filename, 'w') as write_file:
+        json.dump(contents, write_file, indent=1)
 else:
     if processor is process_json:
         print("\tError: error in process notebook contents")
