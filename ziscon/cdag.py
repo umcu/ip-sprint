@@ -211,8 +211,6 @@ def load_data(graph):
             pass
 
     for k, elt in enumerate(read_table('workcontext.csv')):
-        # TODO: remove this simplification after the demo
-        if elt['settingid'].startswith('_'): continue
         new_right = Right(**elt)
         graph.add_node(new_right)
         ownerid = elt['ownerid']
