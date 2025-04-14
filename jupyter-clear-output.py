@@ -48,11 +48,6 @@ except Exception as error:
     sys.exit(1)
 read_file.close()
 
-test = True
-if test:
-    print(f"clean notebook {filename}")
-    sys.exit(0)
-
 # process notebook contents, overwrite notebook if successful
 contents = processor(contents)
 if contents is not None:
