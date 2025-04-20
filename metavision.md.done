@@ -1,0 +1,142 @@
+---
+sidebar_label: 'Metavision (v6)'
+sidebar_position: 17
+description: informatie over het bronsysteem Metavision (v6)
+---
+# Metavision (v6)
+
+<table>
+<thead>
+<tr class="thead-bg"><th>Algemene informatie</th><th></th></tr>
+</thead>
+<tbody>
+<tr>
+<td>Naam bronsysteem</td>
+<td>Metavision</td>
+</tr>
+<tr>
+<td>Omschrijving bronsysteem</td>
+<td>
+Metavision is het PDMS (patient data monitoring system) voor de 3 IC-afdelingen: volwassenen, kinderen, neonatologie.
+Dit betreft de actuele versie, dus v6.
+Onderstaande informatie wordt binnenkort aangevuld in overleg met de betrokken divisies.
+</td>
+</tr>
+<tr>
+<td>Status bronsysteem</td>
+<td>actueel</td>
+</tr>
+<tr>
+<td>Datum toegevoegd</td>
+<td>13-10-2022</td>
+</tr>
+<tr>
+<td>Datum akkoord</td>
+<td>
+Datum waarop data-verantwoordelijke en het Dataplatform het eens zijn
+over de afspraken van de datalevering van het bronsysteem aan het Dataplatform.
+</td>
+</tr>
+<tr class="thead-bg"><th>Contactpersonen</th><th></th></tr>
+<tr>
+<td>Data-verantwoordelijke</td>
+<td>
+Divisie Vitale Functies, Olaf Cremer; Divisie Kinderen, Casper Bollen.
+</td>
+</tr>
+<tr>
+<td>Data-steward</td>
+<td>
+Maaike Nieman-Knoppers, DIT/Zorg Kliniek (functioneel beheerder)
+</td>
+</tr>
+<tr>
+<td>Technisch contactpersoon</td>
+<td>
+Maaike Nieman-Knoppers, DIT/Zorg Kliniek (functioneel beheerder)
+</td>
+</tr>
+<tr class="thead-bg"><th>Beveiliging van de gegevens</th><th></th></tr>
+<tr>
+<td>Incidentprocedure</td>
+<td>
+Via welke route worden storingen en wijzigingen aan het bronsysteem gemeld?
+</td>
+</tr>
+<tr>
+<td>Kwaliteitscriteria</td>
+<td>
+todo
+</td>
+</tr>
+<tr>
+<td>Terugmeldingsplicht</td>
+<td>
+Hoe meldt het Dataplatform geconstateerde afwijkingen terug?
+</td>
+</tr>
+<tr class="thead-bg"><th>Gebruik</th><th></th></tr>
+<tr>
+<td>Doorleveren toegestaan</td>
+<td>Ja</td>
+</tr>
+<tr>
+<td>Toelichting doorleveren</td>
+<td>
+Onder welke voorwaarden mag data uit het bronsysteem wel doorgeleverd worden? todo
+</td>
+</tr>
+<tr class="thead-bg"><th>Documentatie</th><th></th></tr>
+<tr>
+<td>Structuur van brontabellen</td>
+<td>
+todo
+</td>
+</tr>
+<tr>
+<td>Systeemdocumentatie</td>
+<td>todo</td>
+</tr>
+<tr class="thead-bg"><th>Wijze van levering</th><th></th></tr>
+<tr>
+<td>Dataplatform load-laag</td>
+<td>staging</td>
+</tr>
+<tr>
+<td>Type bron</td>
+<td>MS SQL</td>
+</tr>
+<tr>
+<td>Locatie bron</td>
+<td>zie https://dev.azure.com/umcu/DIT-Dataplatform/_wiki/wikis/Dev%20Docs/6841/Metavision</td>
+</tr>
+<tr>
+<td>Post-deploy script</td>
+<td>todo</td>
+</tr>
+<tr>
+<td>Aanlevering techniek</td>
+<td>linked server</td>
+</tr>
+<tr>
+<td>Verversingsmethode</td>
+<td>deels full compare, deels incrementeel</td>
+</tr>
+<tr>
+<td>Verversingsfrequentie</td>
+<td>dagelijks</td>
+</tr>
+<tr class="thead-bg"><th>Datatransformatie</th><th></th></tr>
+<tr>
+<td>Datamodellen</td>
+<td>
+In welke datamodellen in de DWH-laag is de data beschikbaar? todo
+</td>
+</tr>
+<tr class="thead-bg"><th>Versiebeheer</th><th></th></tr>
+<tr>
+<td>Laatste review-datum</td>
+<td>18-04-2025</td>
+</tr>
+</tbody> 
+</table>
