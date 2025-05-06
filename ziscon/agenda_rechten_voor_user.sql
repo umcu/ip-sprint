@@ -25,3 +25,10 @@ FROM           [HIX_Acc].[dbo].[ZISCON_GROEPEN] G
     INNER JOIN [HIX_Acc].[dbo].[CONFIG_WCSEGMENTS] WCS ON WC.[ID] = WCS.[CONFIGUREDWORKCONTEXTID]
     INNER JOIN [HIX_Acc].[dbo].[AGENDA_AGENDA] A ON WCS.[SEGMENTID] = A.[AGENDA]
     WHERE wc.[SettingId] = 'AG_US_BEK'
+
+SELECT SegmentId
+FROM           [HIX_Acc].[dbo].[CONFIG_WORKCONTEXT] WC
+    INNER JOIN [HIX_Acc].[dbo].[CONFIG_WCSEGMENTS] WCS ON WC.[ID] = WCS.[CONFIGUREDWORKCONTEXTID]
+    WHERE wc.[OwnerId] = 'LVOS13' AND wc.[OwnerType] = 'U' AND wc.[SegmentClassId] = 'CSZISLIB_ARTS' AND
+          wcs.Disabled = 'false'
+
