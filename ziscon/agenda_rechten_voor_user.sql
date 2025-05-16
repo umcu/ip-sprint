@@ -19,12 +19,13 @@ FROM           [HIX_Acc].[dbo].[ZISCON_GROEPEN] G
     INNER JOIN [HIX_Acc].[dbo].[CONFIG_WCSEGMENTS] WCS ON WC.[ID] = WCS.[CONFIGUREDWORKCONTEXTID]
 WHERE wc.[SettingId] like 'OND%'
 
-SELECT *
+SELECT CODE, SEARCHCODE, Id, OwnerId, OwnerType, SettingId, SettingSubId,
+       SegmentClassId, ContextType, Inverted, ConfiguredWorkContextId, SegmentId, Disabled
 FROM           [HIX_Acc].[dbo].[ZISCON_GROEPEN] G
     inner JOIN [HIX_Acc].[dbo].[CONFIG_WORKCONTEXT] WC ON G.[CODE] = WC.[OwnerId]
     INNER JOIN [HIX_Acc].[dbo].[CONFIG_WCSEGMENTS] WCS ON WC.[ID] = WCS.[CONFIGUREDWORKCONTEXTID]
-    INNER JOIN [HIX_Acc].[dbo].[AGENDA_AGENDA] A ON WCS.[SEGMENTID] = A.[AGENDA]
-    WHERE wc.[SettingId] = 'AG_US_BEK'
+    -- INNER JOIN [HIX_Acc].[dbo].[AGENDA_AGENDA] A ON WCS.[SEGMENTID] = A.[AGENDA]
+    WHERE wc.[OwnerId] = 'ZH1178'
 
 SELECT SegmentId
 FROM           [HIX_Acc].[dbo].[CONFIG_WORKCONTEXT] WC
