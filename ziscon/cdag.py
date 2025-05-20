@@ -1,7 +1,8 @@
 """CDAG: colored directed acyclic graph"""
 
+import re
 from csv import DictReader
-from collections import defaultdict
+from collections import defaultdict, deque
 from itertools import chain
 
 """Actual classes and functions for the DAG"""
@@ -11,6 +12,7 @@ class Graph:
         self.edges = {}
         self.node_number = 0
         self.edge_number = 0
+        self.guid_map = {}
     def add_node(self, node):
         self.node_number += 1
         node.nodeid = self.node_number
@@ -23,9 +25,6 @@ class Graph:
         edge = Edge(nodea, kind, nodeb)
         nodea.add_edge(edge)
         self.add_edge(edge)
-    def adjacent(self, node, kind):
-        edges = [edge for edge in node.edges if edge.kind == kind]
-        return [edge.end for edge in edges]
     def find_nodes(self, kind, **kwarg):
         """
         search nodes of kind `kind` with key == value or key.lower()== value,
@@ -49,6 +48,9 @@ class Graph:
         else:
             print(f"Multiple {kind}s found with {kwarg}")
             return
+    def primary_groups(self):
+        return [node for node in self.nodes.values()
+                if node.kind == 'Group' and node.primary]
     def ancestors_of_group(self, group, visited=None, distance=1):
         if visited is None:
             visited = defaultdict(int)
@@ -60,13 +62,10 @@ class Graph:
             result.append(parent)
             result.extend(self.ancestors_of_group(parent, visited, distance+1))
         return result
-
     def groups_for_user(self, user):
         return self.adjacent(user, 'ismember')
-
     def roles_for_user(self, user):
         return self.adjacent(user, 'hasrole')
-
     def effective_groups_for_user(self, user):
         parents = self.groups_for_user(user)
         all_groups = list(chain.from_iterable(self.ancestors_of_group(g) for g in parents))
@@ -76,16 +75,21 @@ class Graph:
         all_groups.sort(key=lambda g: g._distance)
         return all_groups
 class Node:
+    nodecount = 0
     def __init__(self, **kwarg):
         self.kind = 'Node'
         self.edges = []
-        self.nodeid = 0
+        self.nodecount += 1
+        self.nodeid = self.nodecount
         for key, value in kwarg.items():
             setattr(self, key, value)
     def __str__(self):
         return f"Node {self.nodeid}"
     def add_edge(self, edge):
         self.edges.append(edge)
+    def adjacent(self, kind):
+        edges = [edge for edge in self.edges if edge.kind == kind]
+        return [edge.end for edge in edges]
 
 class User(Node):
     def __init__(self, **kwarg):
@@ -105,6 +109,7 @@ class Group(Node):
     def __init__(self, **kwarg):
         super().__init__(**kwarg)
         self.kind = 'Group'
+        self.primary = True
     def __str__(self):
         return f"{self.code} {self.searchcode} {self.omschr}"
 
@@ -124,10 +129,38 @@ class Edge:
     def __str__(self):
         return f"{self.begin} {self.kind} {self.end}"
 
+"""Traversal"""
+def breadth_first_traversal(node: Node):
+    """Perform breadth-first traversal (BFS) on the graph.
+    The traversal starts from vertex `node`.
+
+    Arguments:
+       * node (Item): starting point of traversal
+    """
+    # create a queue for doing BFS, and lookup tables for visited persons and families
+    queue = deque()
+    visited_nodes = defaultdict(bool)
+    # add start node to the queue
+    visited_nodes[node.nodeid] = True
+    queue.append(node)
+    while queue:
+        # de-queue node
+        node = queue.popleft()
+        yield node
+        neighbours = node.adjacent('haschild')
+        for neighbour in neighbours:
+            nid = neighbour.nodeid
+            # ignore neighbour if it was already visited, otherwise add to queue
+            if visited_nodes[nid]:
+                continue
+            else:
+                visited_nodes[nid] = True
+                queue.append(neighbour)
+
 """Data handling"""
-def read_table(filename, cast=True):
+def read_table(filename, cast=True, sep=','):
     with open(filename) as csvfile:
-        reader = DictReader(csvfile, delimiter=',')
+        reader = DictReader(csvfile, delimiter=sep)
         result = []
         if cast:
             for k, row in enumerate(reader):
@@ -140,11 +173,9 @@ def read_table(filename, cast=True):
 
 def load_data(graph):
     """
-    Future version: load the following tables from the database
+    Future version: load the tables from the database
     - tables ziscon_groepen, ziscon_groepusr, ziscon_groeplnk, ziscon_user
     - tables config_workcontext, config_wcsegments
-    - join config_workcontext and config_wcsegments on wc.id = wcs.configuredworkcontextid
-
     For now: use CSV exports (raw for ziscon, pre-joined for config)
     """
     error_log = open('error.log', 'w')
@@ -172,14 +203,14 @@ def load_data(graph):
                 user = user_index[linkcode]
                 if groupcode in group_index:
                     group = group_index[groupcode]
-                    graph.connect(user, 'ismember', group)
+                    graph.connect(user, 'ismemberof', group)
                 else:
                     print(f"user-group: group {groupcode} not in group index, user linkcode={linkcode}")
             elif linkcode in role_index:
                 role = role_index[linkcode]
                 if groupcode in group_index:
                     group = group_index[groupcode]
-                    graph.connect(role, 'ismember', group)
+                    graph.connect(role, 'ismemberof', group)
                 else:
                     print(f"user-group: group {groupcode} not in group index, role={linkcode}")
             else:
@@ -191,7 +222,9 @@ def load_data(graph):
                 parent = group_index[parentcode]
                 if childcode in group_index:
                     child = group_index[childcode]
-                    graph.connect(child, 'ischild', parent)
+                    child.primary = False
+                    graph.connect(child, 'ischildof', parent)
+                    graph.connect(parent, 'haschild', child)
                 else:
                     print(f"group-group: child {childcode} not in group index, parent={parentcode}")
             else:
@@ -219,3 +252,50 @@ def load_data(graph):
             graph.connect(group, 'hasright', new_right)
         else:
             print(f"group-workcontext: group {ownerid} not in group index, record={k}", file=error_log)
+
+# read reference table guid -> table name
+table_name = {}
+for elt in read_table('chipsoft_logic_table_guids.csv', sep=';'):
+    table_name[elt['classguid']] = elt['classid']
+
+# Unicode dingbats, open and closed circled digits
+OD1, CD1 = '\u2780', '\u2776'
+OD2, CD2 = '\u2781', '\u2777'
+OD3, CD3 = '\u2782', '\u2778'
+level1_rx = re.compile(r'"([\u2782\u2778\u2781\u2777\x20\x21\x23-\x7E]+?)"')
+level2_rx = re.compile(r'""([\u2782\u2778\x20\x21\x23-\x7E]+?)""')
+level3_rx = re.compile(r'""""([\x20\x21\x23-\x7E]+?)""""')
+guid_rx = re.compile(r'\{[A-Z0-9-]+?\}')
+
+def resolve_guid(match):
+    return table_name.get(match.group(0), '<unknown>')
+
+def tokenize(s):
+    if s.startswith('C'):
+        s3 = level3_rx.sub('\u2782\g<1>\u2778', s)
+        s2 = level2_rx.sub('\u2781\g<1>\u2777', s3)
+        s1 = level1_rx.sub('\u2780\g<1>\u2776', s2)
+        return s1
+    else:
+        return s
+
+def parse(s):
+    value = s.rstrip('\x01\u00a9')
+    if value[0] == 'C':
+        if value[1:] == 'T':
+            return value.split()
+        else:
+            tokens = tokenize(guid_rx.sub(resolve_guid, value))
+            if tokens.startswith('\u2780') and tokens.endswith('\u2776'):
+                # TODO: handle levels 2 and 3
+                return tokens[1:-1].split('\u2776,\u2780')
+            else:
+                print(f"{tokens}: begin={tokens[0]} end={tokens[-1]}")
+                return value
+    elif value[0] == 'L':
+      if value[1:] in ('T', 'T'*6):
+          return value.split()
+      else:
+        return value
+
+
