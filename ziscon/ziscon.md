@@ -10,7 +10,13 @@ met tabellen die relevant zijn voor het modelleren van rechten en een grote groe
 
 ### Ziscon: relevante tabellen
 
-Voor het deel van bepalen van rechten van gebruikers, rollen en groepen zijn op dit moment de volgende tabellen als relevant bestempeld: ziscon_groepen, ziscon_groepusr, ziscon_groeplnk, ziscon_user.
+Voor het deel van bepalen van rechten van gebruikers, rollen en groepen zijn op dit moment
+de volgende tabellen als relevant bestempeld:
+
+- `ziscon_groepen` (groepen)
+- `ziscon_groepusr` (rollen, inloggroepen)
+- `ziscon_groeplnk` (relaties tussen groepen en onderling, en tussen gebruikers en groepen)
+- `ziscon_user` (gebruikers)
 
 ### Ziscon: overige tabellen
 
@@ -23,53 +29,58 @@ afzonderlijk.
 
 ### Config: overige tabellen
 
-config_insthelp: lege tabel, negeren
+`config_insthelp`: dit is een lege tabel, die we derhalve kunnen negeren.
 
-config_trsetval: lege tabel, negeren
+`config_trsetval`: idem
 
-config_insthist: mutaties in configuraties, lijkt niet relevant nu
+`config_insthist`: deze tabel bevat mutaties in configuraties, en lijkt niet relevant voor
+het modelleren van rechten.
 
-config_instinfo: toelichting bij sommige configuraties (beperkt aantal records)
+`config_instinfo`: deze tabel bevat toelichtingen bij sommige configuraties en bevat
+slechts een beperkt aantal records.
 
-config_instflag: kolommen naam, speccode, actief, vlaggen.
-De functie van deze tabel is nog niet duidelijk.
+`config_instflag`: kolommen `naam`, `speccode`, `actief`, `vlaggen`.
+De functie van deze tabel - en dus ook de relevantie voor het modelleren van rechten - is nog niet duidelijk.
 
 ### config_workcontext
 
-config_wcsegments (koppeltabel): kolommen configuredworkcontextid, … disabled (boolean)
-Bevat de segmenten van een werkcontext. 
+`config_wcsegments`: kolommen `configuredworkcontextid` (identifier), `SegmentId`(identifier),
+`Disabled` (boolean). Deze tabel bevat de segmenten van een werkcontext. 
 
-config_workcontext: kolommen  id=PK, ownerid (username/group code), ownertype, settingid, settingsubid, segmentsclassid, contexttype, inverted (boolean)
+config_workcontext: kolommen `id` (identifier, primary key), `ownerid` (gebruikersnaam of groepcode),
+`ownertype`, `settingid` (string), `settingsubid` (string), `segmentclassid` (string, meestal naam
+van tabel of logic in HiX), `contexttype` (getal), `inverted` (boolean).
 
-- ownertype: G (27135 records) of U (4912 records)
-- settingid: alias voor setting
-- subsettingid: alias voor subsetting, soms tabelnaam, soms leeg
-- segmentclassid: module of tabel, bijvoorbeeld agenda_agenda of vrlcat
-- segmentid: agenda-id, vrlcat-id enzovoorts
+- `ownertype`: G (27135 records) of U (4912 records)
+- `settingid`: alias voor setting
+- `subsettingid`: alias voor subsetting, soms tabelnaam, soms leeg
+- `segmentclassid`: naam van module of tabel (logic), bijvoorbeeld agenda_agenda of vrlcat
+- `segmentid`: identifier voor record in tabel, bijvoorbeeld subagenda of vragenlijst-categorie
 
 Deze tabellen kun je het beste joinen op
 
-`config_wcsegments.configuredworkcontextid=config_workcontext.id`
+`config_wcsegments.configuredworkcontextid = config_workcontext.id`
 
 ### config_instvars
 
-config_instvars: kolommen naam, owner, insttype, speccode
+`config_instvars`: kolommen `naam` (naam van configuratie of recht), `owner` (eigenaar van
+configuratie/recht), `insttype` (type configuratie), `speccode`
 (naam  van recht wanneer naam=’ond_rechten’, samengestelde rechten),
-value, etd_status (vaak lege kolom)
+`value` (de feitelijke instelling), `etd_status` (vaak lege kolom)
 
-| insttype | aantal | toelichting    | owner    |
-|----------|--------|----------------|----------|
-| C        |   5671 | context        |          |
-| D        |    351 | default        | chipsoft |
-| G        |   6383 | global setting | chipsoft |
-| L        |  70606 | local setting  |          |
-| U        | 904805 | user setting   |          |
+| insttype |  aantal | toelichting    | owner    |
+|----------|--------:|----------------|----------|
+| C        |    5671 | context        |          |
+| D        |     351 | default        | chipsoft |
+| G        |    6383 | global setting | chipsoft |
+| L        |   70606 | local setting  |          |
+| U        |  904805 | user setting   |          |
 
 De relevante informatie zit in de kolom `VALUE`. Het is praktisch om aan het 
 einde van `VALUE` bepaalde tekens te 'strip-pen', bijvoorbeeld (in hex-notatie)
 '00', '01' en 'a9'.
 
-Voor types G en D zullen we deze inhoud van `VALUE` niet
+Voor types G en D zullen we de inhoud van `VALUE` niet
 beschrijven, omdat deze instellingen niet relevant zijn voor het modelleren van rechten.
 
 Voor type U is de inhoud van `VALUE` divers. Regelmatig zien we hierin XLM-strings, 
@@ -105,17 +116,18 @@ Het patroon `C{}` beschrijft waardes die werkcontexten met GUID's bevatten. Deze
 we hieronder uitgebreid beschrijven.
 
 1. Er kunnen 1 of meerdere contexten ingesteld zijn.
-2. Eén context bestaat uit: X,{GUID},[T|F],<Een of meerdere ID's>
-3. De X staat voor het soort recht (0=Inzien, 1=Printen, 3=Toevoegen, 4=Wijzigen, 5=Verwijderen, 6=Alles)
+2. Eén context bestaat uit: X,{GUID},[T|F],<een of meer identifiers>
+3. De X staat voor het soort recht (0=inzien, 1=printen, 3=toevoegen, 4=wijzigen, 5=verwijderen, 6=alles)
 4. De GUID kun je vertalen naar een logic-naam (meestal tabelnaam); op te zoeken met de expressiefunctie 
    expressie DDAliasOfGuid(), bijvoorbeeld in HiX Overzichtsgenerator.
    Dataplatform bevat een vertaaltabel chipsoft_logic_table_guids voor dit doel. 
-5. Na de GUID komt een T of een F. Dit is het "Alles behalve" vinkje in HiX.
+5. Na de GUID komt een T of een F. Dit is vinkje 'alles behalve' in HiX.
    Wanneer dit aanstaat zijn de hierop volgende ID's juist uitgesloten.
 6. De ID's geven aan wat er binnen de Logic (GUID) toegestaan is, danwel uitgesloten (alles behalve)
 7. Wanneer de naam "__CSSTD__CSSTD__" is, dan is het een standaard werkcontext
-   (werkt op alle rechten die gevoelig zijn voor deze context)
-8. Wanneer de naam anders is, dan is het een rechtgebonden context; deze is slechts op één recht van toepassing.
+   (werkt op alle rechten die gevoelig zijn voor deze context).
+8. Wanneer de naam anders is, dan is het een rechtgebonden context;
+   deze context is slechts op één recht van toepassing.
 
 Voorbeeld:
 
