@@ -1,9 +1,10 @@
 """CDAG: colored directed acyclic graph"""
 
-import re
-from csv import DictReader
+import csv, re, sys
 from collections import defaultdict, deque
 from itertools import chain
+
+csv.field_size_limit(sys.maxsize)
 
 """Actual classes and functions for the DAG"""
 class Graph:
@@ -55,7 +56,7 @@ class Graph:
         if visited is None:
             visited = defaultdict(int)
         result = []
-        for parent in self.adjacent(group, 'ischild'):
+        for parent in group.adjacent('ischildof'):
             if visited[parent.nodeid]: continue
             visited[parent.nodeid] = 1
             parent._distance = distance
@@ -63,9 +64,9 @@ class Graph:
             result.extend(self.ancestors_of_group(parent, visited, distance+1))
         return result
     def groups_for_user(self, user):
-        return self.adjacent(user, 'ismember')
+        return user.adjacent('ismemberof')
     def roles_for_user(self, user):
-        return self.adjacent(user, 'hasrole')
+        return user.adjacent('hasrole')
     def effective_groups_for_user(self, user):
         parents = self.groups_for_user(user)
         all_groups = list(chain.from_iterable(self.ancestors_of_group(g) for g in parents))
@@ -110,6 +111,7 @@ class Group(Node):
         super().__init__(**kwarg)
         self.kind = 'Group'
         self.primary = True
+        self.rights = []
     def __str__(self):
         return f"{self.code} {self.searchcode} {self.omschr}"
 
@@ -160,16 +162,17 @@ def breadth_first_traversal(node: Node):
 """Data handling"""
 def read_table(filename, cast=True, sep=','):
     with open(filename) as csvfile:
-        reader = DictReader(csvfile, delimiter=sep)
-        result = []
-        if cast:
-            for k, row in enumerate(reader):
-                # strip() is necessary because some cells have leading or trailing whitespace
-                result.append({key.lower(): value.strip() for key, value in row.items()})
-        else:
-            for k, row in enumerate(reader):
-                result.append({key: value.strip() for key, value in row.items()})
-    return result
+        reader = csv.DictReader(csvfile, delimiter=sep)
+        try:
+            if cast:
+                for k, row in enumerate(reader):
+                    # strip() is necessary because some cells have leading or trailing whitespace
+                    yield {key.lower(): value.strip() for key, value in row.items()}
+            else:
+                for k, row in enumerate(reader):
+                    yield {key: value.strip() for key, value in row.items()}
+        except Exception as e:
+            print(f"{filename}.{k}: {e}\n{row}")
 
 def load_data(graph):
     """
@@ -181,7 +184,7 @@ def load_data(graph):
     error_log = open('error.log', 'w')
     user_index, role_index = {}, {}
     for elt in read_table('ziscon_user.csv'):
-        if elt['inloggroep'] == '1':
+        if elt['inloggroep'] == 'True':
             new_node = Role(**elt)
             role_index[elt['naam']] = new_node
         else:
@@ -196,7 +199,7 @@ def load_data(graph):
         graph.add_node(new_group)
 
     for elt in read_table('ziscon_groeplnk.csv'):
-        linkcode, groupcode = elt['linkcode'], elt['groepcode']
+        groupcode, linkcode = elt['groepcode'], elt['linkcode']
         if linkcode.isalnum():
             # most users are alphanumeric, some are numeric \d{8} however
             if linkcode in user_index:
@@ -234,7 +237,8 @@ def load_data(graph):
         grpusrcode, usercode = elt['grpusrcode'], elt['usercode']
         if usercode in user_index:
             user = user_index[usercode]
-            if grpusrcode == 'CHIPSOFT': continue
+            if grpusrcode == 'CHIPSOFT':
+                continue
             if grpusrcode in role_index:
                 role = role_index[grpusrcode]
                 graph.connect(user, 'hasrole', role)
@@ -243,15 +247,50 @@ def load_data(graph):
         else:  # mostly Chipsoft-related users
             pass
 
-    for k, elt in enumerate(read_table('workcontext.csv')):
-        new_right = Right(**elt)
-        graph.add_node(new_right)
-        ownerid = elt['ownerid']
-        if ownerid in group_index:
-            group = group_index[ownerid]
-            graph.connect(group, 'hasright', new_right)
-        else:
-            print(f"group-workcontext: group {ownerid} not in group index, record={k}", file=error_log)
+    wcs_index = defaultdict(list)
+    for k, elt in enumerate(read_table('config_wcsegments.csv')):
+        if elt['disabled'] == 'True':
+            continue
+        wcid = elt['configuredworkcontextid']
+        wcs_index[wcid].append(elt['segmentid'])
+
+    for k, elt in enumerate(read_table('config_workcontext.csv')):
+        if elt['ownertype'] == 'U':
+            continue
+        wcid, groupcode = elt['id'], elt['ownerid']
+        if groupcode in group_index:
+            segments = wcs_index[wcid]
+            record = {
+                'settingid':      elt['settingid'],
+                'settingsubid':   elt['settingsubid'],
+                'segmentclassid': elt['segmentclassid'],
+                'segmentid':      segments,
+                'contexttype':    elt['contexttype'],
+                'inverted':       elt['inverted']
+            }
+            group = group_index[groupcode]
+            group.rights.append(record)
+        else:  # occurs too often, but referential incompleteness is not our problem atm
+            pass
+
+    for k, elt in enumerate(read_table('config_instvars.csv')):
+        owner = elt['owner']
+        if not owner.startswith('@G'):
+            continue
+        groupcode = owner[2:]
+        if groupcode in group_index:
+            record = {
+                'settingid':      elt['naam'],
+                'settingsubid':   elt['speccode'],
+                'segmentclassid': parse(elt['value']),
+                'segmentid':      [],
+                'contexttype':    '',
+                'inverted':       ''
+            }
+            group = group_index[groupcode]
+            group.rights.append(record)
+        else:  # occurs too often, but referential incompleteness is not our problem atm
+            pass
 
 # read reference table guid -> table name
 table_name = {}
@@ -286,11 +325,11 @@ def parse(s):
             return value.split()
         else:
             tokens = tokenize(guid_rx.sub(resolve_guid, value))
-            if tokens.startswith('\u2780') and tokens.endswith('\u2776'):
+            if tokens.startswith('C\u2780') and tokens.endswith('\u2776'):
                 # TODO: handle levels 2 and 3
                 return tokens[1:-1].split('\u2776,\u2780')
             else:
-                print(f"{tokens}: begin={tokens[0]} end={tokens[-1]}")
+                # print(f"{tokens}: begin={tokens[0]} end={tokens[-1]}")
                 return value
     elif value[0] == 'L':
       if value[1:] in ('T', 'T'*6):
